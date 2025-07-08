@@ -1,0 +1,202 @@
+/* General container */
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #0f172a 0%, #38bdf8 100%);
+  min-height: 100vh;
+  backdrop-filter: blur(8px) saturate(120%);
+}
+
+/* Centered content box */
+.landing-box {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(30, 41, 59, 0.85);
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(56, 189, 248, 0.18), 0 1.5px 8px 0 #38bdf820;
+  border: 1.5px solid rgba(56, 189, 248, 0.18);
+  backdrop-filter: blur(12px) saturate(120%);
+}
+
+/* Title */
+.landing-title {
+  text-align: center;
+  font-size: 2.7rem;
+  color: #38bdf8;
+  margin-bottom: 30px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 12px #38bdf850;
+}
+
+/* Search bar */
+.landing-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  border: 1.5px solid #334155;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  margin-bottom: 30px;
+  transition: 0.3s box-shadow, 0.3s border;
+  box-shadow: 0 2px 8px 0 #38bdf810;
+  outline: none;
+}
+
+.landing-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px 2px #38bdf850;
+}
+
+/* Info messages */
+.landing-info,
+.landing-error {
+  text-align: center;
+  font-size: 1.05rem;
+  margin-bottom: 20px;
+  color: #f87171;
+  background: rgba(56, 189, 248, 0.08);
+  border-radius: 8px;
+  padding: 8px 0;
+}
+
+/* Fund list (vertical) */
+.fund-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* Fund card (Google-style row) */
+.fund-result-row {
+  background: linear-gradient(120deg, rgba(30,41,59,0.95) 60%, rgba(56,189,248,0.10) 100%);
+  padding: 22px 20px;
+  border: 1.5px solid #334155;
+  border-radius: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  box-shadow: 0 2px 12px 0 #38bdf810;
+  backdrop-filter: blur(6px);
+}
+
+.fund-result-row:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 24px 0 #38bdf820, 0 1.5px 8px 0 #38bdf820;
+  border-color: #38bdf8;
+}
+
+.fund-result-row h3 {
+  margin: 0 0 8px;
+  font-size: 1.18rem;
+  color: #e0f2fe;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.fund-result-row p {
+  margin: 0;
+  font-size: 0.98rem;
+  color: #94a3b8;
+}
+
+/* Informational section */
+.fund-info {
+  background: rgba(30, 41, 59, 0.92);
+  padding: 28px;
+  border-radius: 16px;
+  line-height: 1.7;
+  color: #e2e8f0;
+  border: 1.5px solid #334155;
+  box-shadow: 0 2px 12px 0 #38bdf810;
+  margin-bottom: 24px;
+}
+
+.fund-info h2 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.fund-info p {
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+
+/* Home modern responsive styles */
+.home-box {
+  background: rgba(255,255,255,0.10);
+  border-radius: 22px;
+  box-shadow: 0 6px 24px 0 #38bdf810, 0 1.5px 8px 0 #38bdf820;
+  padding: 32px 24px 24px 24px;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  border: 1.5px solid #38bdf820;
+  backdrop-filter: blur(10px) saturate(120%);
+}
+
+.home-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 2px 12px #38bdf850;
+}
+
+.home-input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1.5px solid #38bdf8;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  background: rgba(241,245,249,0.85);
+  color: #0f172a;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px 0 #38bdf810;
+  outline: none;
+}
+
+.home-input:focus {
+  border: 1.5px solid #0ea5e9;
+  box-shadow: 0 0 12px 2px #38bdf850;
+}
+
+@media (max-width: 900px) {
+  .landing-box {
+    padding: 24px 8px;
+    max-width: 98vw;
+  }
+  .fund-info {
+    padding: 16px 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-box {
+    padding: 16px 4px 10px 4px;
+    max-width: 98vw;
+  }
+  .home-title {
+    font-size: 1.2rem;
+  }
+  .landing-title {
+    font-size: 1.3rem;
+  }
+  .landing-box {
+    padding: 16px 4px;
+    border-radius: 14px;
+  }
+  .fund-result-row {
+    padding: 12px 8px;
+    border-radius: 10px;
+  }
+}

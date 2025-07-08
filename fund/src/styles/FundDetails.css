@@ -1,0 +1,106 @@
+.fund-details-container {
+  padding: 40px 16px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fund-details-box {
+  background: rgba(30, 41, 59, 0.9); /* Glassy dark */
+  border: 1.5px solid #38bdf820;
+  padding: 30px 24px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(12px) saturate(120%);
+  text-align: center;
+}
+
+.fund-details-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 12px #38bdf820;
+}
+
+.fund-details-meta,
+.fund-details-nav {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.fund-details-nav strong {
+  color: #facc15;
+}
+
+.fund-details-button,
+.fund-details-save {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  margin: 10px 8px 0 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Save button */
+.fund-details-save {
+  background-color: #22c55e;
+  color: #0f172a;
+}
+.fund-details-save:hover {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+.fund-details-save:disabled {
+  background-color: #4ade80;
+  color: #1e293b;
+  cursor: not-allowed;
+}
+
+/* Back button */
+.fund-details-button {
+  background-color: #0ea5e9;
+  color: #0f172a;
+}
+.fund-details-button:hover {
+  background-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Error and loading */
+.fund-details-message,
+.fund-details-error {
+  font-size: 1rem;
+  text-align: center;
+  padding: 12px;
+}
+.fund-details-error {
+  color: #f87171;
+}
+.fund-details-message {
+  color: #cbd5e1;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .fund-details-box {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+  .fund-details-title {
+    font-size: 1.4rem;
+  }
+  .fund-details-button,
+  .fund-details-save {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
