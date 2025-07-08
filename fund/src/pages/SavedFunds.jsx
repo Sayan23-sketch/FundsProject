@@ -19,8 +19,8 @@ function SavedFunds() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // ✅ FIXED: Get the array from the correct key
-        const ids = res.data.savedFundIds || [];
+        // ✅ FIXED: Correctly extract savedFundIds array
+        const ids = res.data.savedFundIds;
         setSavedIds(ids);
       } catch (err) {
         console.error("Failed to fetch saved funds:", err);
