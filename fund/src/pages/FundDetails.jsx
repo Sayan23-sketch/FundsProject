@@ -4,7 +4,7 @@ import API from "../services/api";
 import "../styles/FundDetails.css";
 
 function FundDetails() {
-  const { schemeCode } = useParams(); // Must match App.jsx route param
+  const { schemeCode } = useParams(); // e.g., 118550
   const [searchParams] = useSearchParams();
   const isCustom = searchParams.get("custom") === "true";
 
@@ -29,7 +29,6 @@ function FundDetails() {
             setFund(found);
           }
         } else {
-          // Use fetch instead of API (axios) for public API to avoid sending Authorization header
           const res = await fetch(`https://api.mfapi.in/mf/${schemeCode}`);
           const data = await res.json();
           if (data.meta) {
@@ -50,34 +49,46 @@ function FundDetails() {
   // Handle Save
   const handleSave = async () => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       alert("Please log in to save funds.");
       return;
     }
 
+    if (!schemeCode) {
+      alert("Invalid scheme code. Cannot save.");
+      return;
+    }
+
     try {
       setSaving(true);
-      await API.post(
+
+      console.log("🔍 Saving fund ID:", schemeCode);
+      console.log("🔐 Token:", token);
+
+      const response = await API.post(
         "/api/funds/save",
         { fundId: schemeCode },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+
+      console.log("✅ Save response:", response.data);
       setSaved(true);
-      alert("Fund saved successfully.");
+      alert("✅ Fund saved successfully.");
     } catch (err) {
-      console.error("Save error:", err);
-      // Enhanced error handling for 400 errors
+      console.error("❌ Save error:", err);
+
       if (err.response && err.response.data) {
         alert(
-          "Could not save this fund: " +
+          "⚠️ Could not save this fund: " +
             (typeof err.response.data === "string"
               ? err.response.data
-              : JSON.stringify(err.response.data))
+              : err.response.data.msg || JSON.stringify(err.response.data))
         );
       } else {
-        alert("Could not save this fund.");
+        alert("❌ Could not save this fund.");
       }
     } finally {
       setSaving(false);
@@ -142,7 +153,7 @@ function FundDetails() {
             className="fund-details-save"
             disabled={saving || saved}
           >
-            {saved ? "Saved" : saving ? "Saving..." : " Save this Fund"}
+            {saved ? "✔️ Saved" : saving ? "Saving..." : "💾 Save this Fund"}
           </button>
         )}
 

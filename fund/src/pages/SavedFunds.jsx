@@ -10,6 +10,7 @@ function SavedFunds() {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
+  // ✅ Fetch saved fund IDs
   useEffect(() => {
     const fetchSavedFunds = async () => {
       setLoading(true);
@@ -17,7 +18,10 @@ function SavedFunds() {
         const res = await API.get("/api/funds/saved", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setSavedIds(res.data.savedFundIds || []);
+
+        // ✅ FIX: Extract only fundId array from returned data
+        const ids = res.data.map((f) => f.fundId);
+        setSavedIds(ids);
       } catch (err) {
         console.error("Failed to fetch saved funds:", err);
         alert("Failed to fetch saved fund list.");
@@ -26,15 +30,16 @@ function SavedFunds() {
       }
     };
 
-    fetchSavedFunds();
+    if (token) fetchSavedFunds();
   }, [token]);
 
+  // ✅ Fetch fund details (MFAPI + custom)
   useEffect(() => {
     const fetchFundDetails = async () => {
-      const mfapiIds = savedIds.filter((id) => /^\d+$/.test(id)); // numeric IDs only
-      const customIds = savedIds.filter((id) => !/^\d+$/.test(id)); // MongoDB _id
+      const mfapiIds = savedIds.filter((id) => /^\d+$/.test(id)); // numeric IDs
+      const customIds = savedIds.filter((id) => !/^\d+$/.test(id)); // MongoDB IDs
 
-      // 🔹 Fetch from MFAPI (use fetch, not axios/API, to avoid sending Authorization header)
+      // 🔹 Fetch from MFAPI
       const apiPromises = mfapiIds.map((id) =>
         fetch(`https://api.mfapi.in/mf/${id}`)
           .then((res) => res.json())
@@ -55,7 +60,7 @@ function SavedFunds() {
           })
       );
 
-      // 🔹 Fetch from backend for custom funds
+      // 🔹 Fetch custom fund details
       const fetchCustomFunds = async () => {
         try {
           const res = await API.get("/api/funds/custom", {
@@ -92,6 +97,9 @@ function SavedFunds() {
 
     if (savedIds.length > 0) {
       fetchFundDetails();
+    } else {
+      setFunds([]);
+      setCustomFunds([]);
     }
   }, [savedIds, token]);
 
@@ -100,9 +108,9 @@ function SavedFunds() {
       <h2 className="saved-title">Your Saved Mutual Funds</h2>
 
       {loading ? (
-        <p className="saved-message"> Loading saved funds...</p>
+        <p className="saved-message">⏳ Loading saved funds...</p>
       ) : funds.length === 0 && customFunds.length === 0 ? (
-        <p className="saved-message"> You haven't saved any funds yet.</p>
+        <p className="saved-message">📭 You haven't saved any funds yet.</p>
       ) : (
         <div className="saved-list">
           {[...funds, ...customFunds].map((fund) => (
