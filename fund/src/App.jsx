@@ -18,7 +18,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/fund/:schemeCode" element={<FundDetails />} />
         <Route path="/saved" element={<SavedFunds />} />
-        {/* Optional: Handle undefined routes */}
         <Route
           path="*"
           element={<h2 style={{ padding: "2rem" }}>404 - Page Not Found</h2>}
