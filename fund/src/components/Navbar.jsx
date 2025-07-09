@@ -26,7 +26,7 @@ function Navbar() {
     navigate("/login");
   };
 
-  // Close menu on navigation
+  // Close menu on resize
   useEffect(() => {
     if (!menuOpen) return;
     const close = () => setMenuOpen(false);
@@ -36,52 +36,55 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">Mutual Fund App</div>
-      <button
-        className={`navbar-toggle${menuOpen ? " open" : ""}`}
-        aria-label="Toggle navigation menu"
-        onClick={() => setMenuOpen((v) => !v)}
-      >
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </button>
-      <div className={`navbar-links${menuOpen ? " show" : ""}`}>
-        {/* 3 lines for phone screens */}
-        <div className="navbar-group">
-          <Link to="/" onClick={() => setMenuOpen(false)}>
-            Home
-          </Link>
-          <Link to="/add-fund" onClick={() => setMenuOpen(false)}>
-            Add Fund
-          </Link>
-        </div>
-        <div className="navbar-group">
-          <Link to="/saved" onClick={() => setMenuOpen(false)}>
-            Saved Funds
-          </Link>
-          {!isLoggedIn && (
-            <Link to="/login" onClick={() => setMenuOpen(false)}>
-              Login
+      <div className="navbar-inner">
+        <div className="navbar-brand">Mutual Fund App</div>
+
+        <button
+          className={`navbar-toggle${menuOpen ? " open" : ""}`}
+          aria-label="Toggle navigation menu"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </button>
+
+        <div className={`navbar-links${menuOpen ? " show" : ""}`}>
+          <div className="navbar-group">
+            <Link to="/" onClick={() => setMenuOpen(false)}>
+              Home
             </Link>
-          )}
-        </div>
-        <div className="navbar-group">
-          {!isLoggedIn ? (
-            <Link to="/register" onClick={() => setMenuOpen(false)}>
-              Register
+            <Link to="/add-fund" onClick={() => setMenuOpen(false)}>
+              Add Fund
             </Link>
-          ) : (
-            <button
-              className="logout-button"
-              onClick={() => {
-                handleLogout();
-                setMenuOpen(false);
-              }}
-            >
-              Logout
-            </button>
-          )}
+          </div>
+          <div className="navbar-group">
+            <Link to="/saved" onClick={() => setMenuOpen(false)}>
+              Saved Funds
+            </Link>
+            {!isLoggedIn && (
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                Login
+              </Link>
+            )}
+          </div>
+          <div className="navbar-group">
+            {!isLoggedIn ? (
+              <Link to="/register" onClick={() => setMenuOpen(false)}>
+                Register
+              </Link>
+            ) : (
+              <button
+                className="logout-button"
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </nav>
