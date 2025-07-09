@@ -4,7 +4,7 @@ import API from "../services/api";
 import "../styles/FundDetails.css";
 
 function FundDetails() {
-  const { schemeCode } = useParams(); // e.g., 118550
+  const { schemeCode } = useParams();
   const [searchParams] = useSearchParams();
   const isCustom = searchParams.get("custom") === "true";
 
@@ -13,15 +13,16 @@ function FundDetails() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Fetch fund data
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
       try {
         if (isCustom) {
-          const token = localStorage.getItem("token");
           const res = await API.get("/api/funds/custom", {
             headers: { Authorization: `Bearer ${token}` },
           });
+
           const found = res.data.find((f) => f._id === schemeCode);
           if (!found) {
             setError("Custom fund not found.");
@@ -29,12 +30,14 @@ function FundDetails() {
             setFund(found);
           }
         } else {
-          const res = await fetch(`https://api.mfapi.in/mf/${schemeCode}`);
-          const data = await res.json();
-          if (data.meta) {
-            setFund(data.meta);
-          } else {
+          const res = await API.get(`/api/funds/${schemeCode}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!res.data || res.data.status === "ERROR") {
             setError("Invalid scheme code.");
+          } else {
+            setFund(res.data.meta || res.data);
           }
         }
       } catch (err) {
@@ -46,7 +49,6 @@ function FundDetails() {
     fetchData();
   }, [schemeCode, isCustom]);
 
-  // Handle Save
   const handleSave = async () => {
     const token = localStorage.getItem("token");
 
@@ -62,7 +64,6 @@ function FundDetails() {
 
     try {
       setSaving(true);
-
       console.log("🔍 Saving fund ID:", schemeCode);
       console.log("🔐 Token:", token);
 
@@ -83,9 +84,9 @@ function FundDetails() {
       if (err.response && err.response.data) {
         alert(
           "⚠️ Could not save this fund: " +
-            (typeof err.response.data === "string"
-              ? err.response.data
-              : err.response.data.msg || JSON.stringify(err.response.data))
+          (typeof err.response.data === "string"
+            ? err.response.data
+            : err.response.data.msg || JSON.stringify(err.response.data))
         );
       } else {
         alert("❌ Could not save this fund.");
@@ -116,11 +117,11 @@ function FundDetails() {
       <div className="fund-details-box">
         <h2 className="fund-details-title">{fund.scheme_name || fund.name}</h2>
 
-        {fund.fund_house || fund.fundHouse ? (
+        {(fund.fund_house || fund.fundHouse) && (
           <p className="fund-details-meta">
             <strong>Fund House:</strong> {fund.fund_house || fund.fundHouse}
           </p>
-        ) : null}
+        )}
 
         {fund.scheme_type && (
           <p className="fund-details-meta">
@@ -146,7 +147,6 @@ function FundDetails() {
           </p>
         )}
 
-        {/* Save Button */}
         {!isCustom && (
           <button
             onClick={handleSave}
@@ -157,7 +157,6 @@ function FundDetails() {
           </button>
         )}
 
-        {/* Back Link */}
         <Link to={isCustom ? "/saved" : "/"}>
           <button className="fund-details-button">
             ← Back to {isCustom ? "Saved Funds" : "Home"}
