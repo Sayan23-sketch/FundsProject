@@ -10,7 +10,7 @@ function SavedFunds() {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
-  // ✅ Fetch saved fund IDs
+  // Fetch saved fund IDs
   useEffect(() => {
     const fetchSavedFunds = async () => {
       setLoading(true);
@@ -18,8 +18,6 @@ function SavedFunds() {
         const res = await API.get("/api/funds/saved", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        // ✅ FIXED: Correctly extract savedFundIds array
         const ids = res.data.savedFundIds;
         setSavedIds(ids);
       } catch (err) {
@@ -33,13 +31,12 @@ function SavedFunds() {
     if (token) fetchSavedFunds();
   }, [token]);
 
-  // ✅ Fetch fund details (MFAPI + custom)
+  // Fetch fund details (MFAPI + custom)
   useEffect(() => {
     const fetchFundDetails = async () => {
-      const mfapiIds = savedIds.filter((id) => /^\d+$/.test(id)); // numeric IDs
-      const customIds = savedIds.filter((id) => !/^\d+$/.test(id)); // MongoDB IDs
+      const mfapiIds = savedIds.filter((id) => /^\d+$/.test(id));
+      const customIds = savedIds.filter((id) => !/^\d+$/.test(id));
 
-      // 🔹 Fetch from MFAPI
       const apiPromises = mfapiIds.map((id) =>
         fetch(`https://api.mfapi.in/mf/${id}`)
           .then((res) => res.json())
@@ -60,13 +57,11 @@ function SavedFunds() {
           })
       );
 
-      // 🔹 Fetch custom fund details
       const fetchCustomFunds = async () => {
         try {
           const res = await API.get("/api/funds/custom", {
             headers: { Authorization: `Bearer ${token}` },
           });
-
           return res.data
             .filter((fund) => customIds.includes(fund._id))
             .map((fund) => ({
@@ -103,6 +98,25 @@ function SavedFunds() {
     }
   }, [savedIds, token]);
 
+  // Function to save a fund
+  const saveFund = async (fund) => {
+    if (savedIds.includes(fund.schemeCode)) {
+      alert("This fund is already saved.");
+      return;
+    }
+
+    try {
+      await API.post("/api/funds/save", { fundId: fund.schemeCode }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert("Fund saved successfully!");
+      setSavedIds((prev) => [...prev, fund.schemeCode]); // Update savedIds state
+    } catch (err) {
+      console.error("Error saving fund:", err);
+      alert("Failed to save fund.");
+    }
+  };
+
   return (
     <div className="saved-container">
       <h2 className="saved-title">Your Saved Mutual Funds</h2>
@@ -117,7 +131,8 @@ function SavedFunds() {
             <FundCard
               key={fund.schemeCode}
               fund={fund}
-              showSaveButton={false}
+              showSaveButton={true} // Show save button
+              onSave={() => saveFund(fund)} // Pass save function
             />
           ))}
         </div>
